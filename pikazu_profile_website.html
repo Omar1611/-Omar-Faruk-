@@ -1,93 +1,62 @@
+Connect this project to Supabase backend.
 
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ওমর ফারুক-Omar Faruk (Pikazu) - কন্টেন্ট ক্রিয়েটর</title>
-  <style>
-    body {
-      font-family: 'Helvetica Neue', sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-      color: #222;
-    }
-    .header {
-      background: #111;
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    .header h1 {
-      margin: 0;
-      font-size: 2.5em;
-    }
-    .content {
-      max-width: 800px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-    .section h2 {
-      border-bottom: 2px solid #eee;
-      padding-bottom: 10px;
-      margin-bottom: 15px;
-      color: #444;
-    }
-    a {
-      color: #0066cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #888;
-    }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>Omar Faruk (Pikazu)</h1>
-    <p>ভিডিওগ্রাফার | কনটেন্ট নির্মাতা</p>
-  </div>
+Add Supabase authentication with Email and Password login.
 
-  <div class="content">
-    <div class="section">
-      <h2>পরিচিতি</h2>
-      <p>ওমর, যিনি অনলাইনে <strong>Pikazu</strong> নামে পরিচিত, একজন উদীয়মান ভিডিওগ্রাফার। তিনি বাংলাদেশের পাবনা জেলার সাঁথিয়া উপজেলার সৈয়দপুর গ্রাম থেকে উঠে এসেছেন এবং তার কাজের মূল বিষয়বস্তু হচ্ছে গ্রামীণ বাংলাদেশ।</p>
-    </div>
+Create two roles:
+- teacher
+- student
 
-    <div class="section">
-      <h2>কাজের ধরণ</h2>
-      <ul>
-        <li>Nurse's Story</li>
-        <li>প্রাকৃতিক সৌন্দর্য ও ঐতিহ্য সংরক্ষণ</li>
-        <li>সিনেমাটিক ভিডিওগ্রাফি</li>
-      </ul>
-    </div>
+Create database tables:
 
-    <div class="section">
-      <h2>অনলাইন উপস্থিতি</h2>
-      <p>Facebook লিংক: <a href="https://www.facebook.com/Nursesstory1" target="_blank">facebook.com/pikazu</a></p>
-    </div>
+1. users
+- id (uuid, primary key)
+- name (text)
+- email (text)
+- role (teacher or student)
 
-    <div class="section">
-      <h2>লক্ষ্য</h2>
-      <p>গ্রামবাংলার সৌন্দর্য বিশ্ববাসীর সামনে তুলে ধরা এবং তরুণ প্রজন্মকে গ্রামীণ শিকড় সম্পর্কে সচেতন করা।</p>
-    </div>
-  </div>
+2. subjects
+- id (uuid, primary key)
+- name (text)
+- color (text)
 
-  <footer>
-    &copy; 2025 ওমর (Pikazu). সর্বস্বত্ব সংরক্ষিত।
-  </footer>
-</body>
-</html>
+3. lessons
+- id (uuid, primary key)
+- subject_id (foreign key to subjects)
+- teacher_id (foreign key to users)
+- day (text)
+- topic_title (text)
+- description (text)
+- pdf_url (text)
+- created_at (timestamp)
+
+Enable Row Level Security:
+- Students can read all lessons
+- Teachers can only create, update, delete lessons for their own subject
+
+Add Supabase Storage bucket:
+- name: notes
+- allow teachers to upload PDF files
+- save file URL inside lessons table
+
+Create role-based dashboard:
+If role = teacher:
+  Show Teacher Dashboard
+  Allow add/edit/delete lessons
+  Allow upload PDF
+
+If role = student:
+  Show Student Dashboard
+  Display today's subject automatically
+  Show topic, teacher name, description
+  Allow view/download PDF
+
+Add automatic day detection:
+Use system date to detect today's day
+Fetch lesson based on current day
+
+Add notification system:
+When teacher uploads new lesson,
+send notification to all students.
+
+Keep UI clean and simple.
+Use modern medical theme.
